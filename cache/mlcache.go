@@ -94,7 +94,7 @@ func (mlc *MultiLevelCache) Access(address int) {
 	// Miss: Access RAM
 	mlc.Stats.Misses++
 	mlc.Stats.TotalCycles += mlc.l1.accessTime + mlc.l2.accessTime + mlc.l3.accessTime + mlc.memLatency
-	mlc.updateInclusiveCache(tagL1, indexL1, tagL2, indexL2) // Brinv into l1,l2,l3
+	mlc.updateInclusiveCache(tagL1, indexL1, tagL2, indexL2) // bring into l1,l2,l3
 }
 
 // Check if a block exists in a cache level
@@ -109,7 +109,7 @@ func (mlc *MultiLevelCache) checkCache(cache *CacheSim, tag, index int) bool {
 	return false
 }
 
-// Add ablock to a cache
+// Add a block to a cache
 func (mlc *MultiLevelCache) addToCache(cache *CacheSim, tag, index int) {
 	set := &cache.sets[index]
 	for i := range set.blocks {
@@ -119,21 +119,20 @@ func (mlc *MultiLevelCache) addToCache(cache *CacheSim, tag, index int) {
 				valid:    true,
 				lastUsed: 0,
 			}
-			return
-		}
-	}
-	// Evict LRU Block
-	lruIndex := 0
-	for i := 1; i < cache.assoc; i++ {
-		if set.blocks[i].lastUsed < set.blocks[lruIndex].lastUsed {
-			lruIndex = 1
-		}
-	}
+			// Evict LRU Block
+			lruIndex := 0
+			for i := 1; i < cache.assoc; i++ {
+				if set.blocks[i].lastUsed < set.blocks[lruIndex].lastUsed {
+					lruIndex = 1
+				}
+			}
 
-	set.blocks[lruIndex] = Block{
-		tag:      tag,
-		valid:    true,
-		lastUsed: 0,
+			set.blocks[lruIndex] = Block{
+				tag:      tag,
+				valid:    true,
+				lastUsed: 0,
+			}
+		}
 	}
 }
 

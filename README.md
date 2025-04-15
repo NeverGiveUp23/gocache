@@ -19,3 +19,13 @@ Solution is to add padding to ensure a and b reside in separate cache lines.
     Cache lines: Units of data transfer between CPU and memory (typically 64 bytes). When one thread writes to a cache line, other cores with the same line invalidate their copies, forcing a reload from memory.
 
     Performance impact: Frequent invalidations → cache misses → slower execution.
+
+Test Case 3:
+
+Involves getting cache hits/misses within our L1/L2/L3 cache and how many Cycles it took to complete
+
+    L1 Hits: 2
+    L2 Hits: 2
+    L3 Hits: 0
+    Misses: 3
+    Total Cycles: 447
