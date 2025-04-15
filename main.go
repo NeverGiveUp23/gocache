@@ -48,4 +48,14 @@ func main() {
 	   No Padding: 9.4ms
 	   With Padding: 5.6ms
 	*/
+
+	cache := cache.NewCache(64, 16)
+
+	addresses := []int{0, 4, 16, 20, 32, 0, 16}
+
+	for _, addr := range addresses {
+		hit := cache.SimulateAccess(addr)
+		fmt.Printf("Address: %d: %v\n", addr, hit)
+	}
+
 }
