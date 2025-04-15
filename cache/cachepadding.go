@@ -5,15 +5,21 @@ import (
 	"time"
 )
 
-// variable a and b in the same cache line 64 bytes
+// Total 8 bytes (but padded to 64 bytes in cache lines)
 type NoPad struct {
-	a int32
-	b int32
+	a int32 // 4 bytes
+	b int32 // 4 bytes
 }
 
+/*
+Thread 1 updates a, Thread 2 updates b.
+Even though their different variable, the entire cache line is invalidates on each write -> unnecessary synchronization
+*/
+
+// Solution is to add padding to ensure a and b reside in separate cache lines:
 type WithPad struct {
 	a int32
-	_ [60]byte // Pad to 64 bytes (common cache line size)
+	_ [60]byte // Pad to 60 bytes
 	b int32
 }
 
