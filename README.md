@@ -12,4 +12,10 @@ In cachepadding.go I wanted to test the time it takes from a false sharing data 
 Thread 1 updates a, Thread 2 updates b.
 Even though their different variable, the entire cache line is invalidates on each write -> unnecessary synchronization
 
-Solution is to add padding to ensure a and b reside in separate cache lines:
+Solution is to add padding to ensure a and b reside in separate cache lines.
+
+    False sharing occurs when two or more threads (on different CPU cores) modify variables that reside on the same cache line, even though those variables are logically independent.
+
+    Cache lines: Units of data transfer between CPU and memory (typically 64 bytes). When one thread writes to a cache line, other cores with the same line invalidate their copies, forcing a reload from memory.
+
+    Performance impact: Frequent invalidations → cache misses → slower execution.
