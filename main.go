@@ -49,13 +49,28 @@ func main() {
 	   With Padding: 5.6ms
 	*/
 
-	cache := cache.NewCache(64, 16)
+	cacheLine := cache.NewCache(64, 16)
 
 	addresses := []int{0, 4, 16, 20, 32, 0, 16}
 
 	for _, addr := range addresses {
-		hit := cache.SimulateAccess(addr)
+		hit := cacheLine.SimulateAccess(addr)
 		fmt.Printf("Address: %d: %v\n", addr, hit)
 	}
+
+	mlc := cache.NewMultilevelCache()
+
+	addresses = []int{0x0, 0x4, 0x10, 0x14, 0x20, 0x0, 0x10}
+
+	for _, addr := range addresses {
+		mlc.Access(addr)
+	}
+
+	// Print statistics
+	fmt.Printf("L1 Hits: %d\n", mlc.Stats.L1Hits)
+	fmt.Printf("L2 Hits: %d\n", mlc.Stats.L2Hits)
+	fmt.Printf("L3 Hits: %d\n", mlc.Stats.L3Hits)
+	fmt.Printf("Misses: %d\n", mlc.Stats.Misses)
+	fmt.Printf("Total Cycles: %d\n", mlc.Stats.TotalCycles)
 
 }
